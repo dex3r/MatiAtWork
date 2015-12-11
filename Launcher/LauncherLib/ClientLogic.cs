@@ -63,8 +63,9 @@ namespace LauncherLib
 			KillProcessFromZipDir();
 
 			HostProcess = new Process();
-			HostProcess.StartInfo = new ProcessStartInfo( "cmd.exe", "/K start /D \"" + HostDataPath + "\"" + path + "" );
-			//HostProcess.StartInfo.WorkingDirectory = Path.GetPathRoot( finalPath );
+			HostProcess.StartInfo = new ProcessStartInfo( "cmd.exe",  "/C start /D " + HostDataPath + " " + path );
+			HostProcess.StartInfo.WorkingDirectory = Path.GetPathRoot( finalPath );
+
 			HostProcess.Start();
 		}
 
