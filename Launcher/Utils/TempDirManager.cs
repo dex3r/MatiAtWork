@@ -9,7 +9,7 @@ namespace Utils
 {
     public class TempDirManager
     {
-        public const string GLOBAL_TEMP_DIR = "MatiAtWork";
+        public const string GLOBAL_TEMP_DIR = "NvCorp";
 
         private string LocalTempDir;
         private string LocalTempPath;
