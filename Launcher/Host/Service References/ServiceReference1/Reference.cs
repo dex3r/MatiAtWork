@@ -103,10 +103,10 @@ namespace Host.ServiceReference1 {
         System.Threading.Tasks.Task SendZippedDirectoryAsync(System.IO.Stream zipFileStream);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/StartProcessFromZipDir", ReplyAction="http://tempuri.org/IService1/StartProcessFromZipDirResponse")]
-        void StartProcessFromZipDir(string path);
+        void StartProcessFromZipDir(string path, string arguments);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/StartProcessFromZipDir", ReplyAction="http://tempuri.org/IService1/StartProcessFromZipDirResponse")]
-        System.Threading.Tasks.Task StartProcessFromZipDirAsync(string path);
+        System.Threading.Tasks.Task StartProcessFromZipDirAsync(string path, string arguments);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/KillProcessFromZipDir", ReplyAction="http://tempuri.org/IService1/KillProcessFromZipDirResponse")]
         void KillProcessFromZipDir();
@@ -180,12 +180,12 @@ namespace Host.ServiceReference1 {
             return base.Channel.SendZippedDirectoryAsync(zipFileStream);
         }
         
-        public void StartProcessFromZipDir(string path) {
-            base.Channel.StartProcessFromZipDir(path);
+        public void StartProcessFromZipDir(string path, string arguments) {
+            base.Channel.StartProcessFromZipDir(path, arguments);
         }
         
-        public System.Threading.Tasks.Task StartProcessFromZipDirAsync(string path) {
-            return base.Channel.StartProcessFromZipDirAsync(path);
+        public System.Threading.Tasks.Task StartProcessFromZipDirAsync(string path, string arguments) {
+            return base.Channel.StartProcessFromZipDirAsync(path, arguments);
         }
         
         public void KillProcessFromZipDir() {

@@ -7,60 +7,62 @@ using System.Text;
 using System.Net;
 using System.Diagnostics;
 using System.IO;
+using Utils;
+using System.IO.Compression;
 
 namespace LauncherLib
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class Service1 : IService1
-    {
-        public string GetData(int value)
-        {
-            return string.Format("You entered: {0}", value);
-        }
+	public class Service1 : IService1
+	{
+		private ClientLogic Logic;
 
-        public string Ping()
-        {
-            return "Pong";
-        }
+		public Service1()
+		{
+			Logic = ClientLogic.Instance;
+		}
 
-        public CompositeType GetDataUsingDataContract(CompositeType composite)
-        {
-            if (composite == null)
-            {
-                throw new ArgumentNullException("composite");
-            }
-            if (composite.BoolValue)
-            {
-                composite.StringValue += "Suffix";
-            }
-            return composite;
-        }
+		public string GetData( int value )
+		{
+			return string.Format( "You entered: {0}", value );
+		}
 
-        public string GetMachineName()
-        {
-            return Environment.MachineName;
-        }
+		public string Ping()
+		{
+			return "Pong";
+		}
 
-        [OperationBehavior(TransactionAutoComplete = true, TransactionScopeRequired = true)]
-        public void SendZippedDirectory(System.IO.Stream zipFileStream)
-        {
-            using (FileStream fs = new FileStream(@"D:\dziala.zip", FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                Debug.WriteLine("Reciving stream...");
-                zipFileStream.CopyTo(fs);
-            }
+		public CompositeType GetDataUsingDataContract( CompositeType composite )
+		{
+			if( composite == null )
+			{
+				throw new ArgumentNullException( "composite" );
+			}
+			if( composite.BoolValue )
+			{
+				composite.StringValue += "Suffix";
+			}
+			return composite;
+		}
 
-            Debug.WriteLine("Received!");
-        }
+		public string GetMachineName()
+		{
+			return Environment.MachineName;
+		}
 
-        public void StartProcessFromZipDir(string path)
-        {
+		[OperationBehavior( TransactionAutoComplete = true, TransactionScopeRequired = true )]
+		public void SendZippedDirectory( Stream zipFileStream )
+		{
+			Logic.SendZippedDirectory( zipFileStream );
+		}
 
-        }
+		public void StartProcessFromZipDir( string path, string arguments )
+		{
+			Logic.StartProcessFromZipDir( path, arguments );
+		}
 
-        public void KillProcessFromZipDir()
-        {
-
-        }
-    }
+		public void KillProcessFromZipDir()
+		{
+			Logic.KillProcessFromZipDir();
+		}
+	}
 }
