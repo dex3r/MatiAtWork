@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Utils
 {
-    public class TempDirManager
+    public class TempDirManager : ITempDirManager
     {
         public const string GLOBAL_TEMP_DIR = "NvCorp";
 
@@ -57,10 +57,19 @@ namespace Utils
 
         ~TempDirManager()
         {
-            if (Directory.Exists(TempDirectoryPath))
+            try
             {
-                Directory.Delete(TempDirectoryPath, true);
+                if (Directory.Exists(TempDirectoryPath))
+                {
+                    Directory.Delete(TempDirectoryPath, true);
+                }
             }
+            catch { }
+        }
+
+        public string GetTempDirectoryPath()
+        {
+            return InternalTempPath;
         }
     }
 }
