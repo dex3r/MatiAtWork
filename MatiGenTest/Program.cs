@@ -7,13 +7,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
-using ICSharpCode.Decompiler.Disassembler;
-using ICSharpCode.Decompiler;
 using System.IO;
 using System.Threading;
-using ICSharpCode.Decompiler.Ast;
 using MatiGen;
-using Utils;
 using System.Diagnostics;
 
 namespace MatiGenTesta

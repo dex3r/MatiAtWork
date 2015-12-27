@@ -19,9 +19,14 @@ namespace MatiGen.Problems
             trials.Add(CreateTest(23, 90));
         }
 
-        public double Evaluate(Delegate solverMethod)
+        public override double Evaluate(Delegate solverMethod)
         {
-            var addingMethod = (Func<double, double, double>)solverMethod;
+            var addingMethod = solverMethod as Func<double, double, double>;
+
+            if(addingMethod == null)
+            {
+                return 0f;
+            }
 
             int validCount = 0;
 

@@ -108,6 +108,8 @@ namespace MatiGen
                 int complexity = r.Next(minComplexity, maxComplexity + 1);
                 GPGenome newGenome = new GPGenome();
                 newGenome.InitializeRandomGenome(complexity, Problem, MutationSettings);
+
+                Genomes.Add(newGenome);
             }
         }
 

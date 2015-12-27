@@ -27,6 +27,6 @@ namespace MatiGen
             return Enumerable.Empty<ParameterExpression>();
         }
 
-        public abstract float Evaluate(Delegate solverMethod);
+        public abstract double Evaluate(Delegate solverMethod);
     }
 }

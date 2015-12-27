@@ -11,7 +11,6 @@ using System.Threading;
 using System.Collections.Concurrent;
 using System.IO;
 using System.IO.Compression;
-using Utils;
 using System.Diagnostics;
 
 namespace Host

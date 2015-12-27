@@ -18,11 +18,13 @@ namespace MatiGenConsole
 
         static void Main(string[] args)
         {
+            InitializeProblem();
+
             population = new Population(problem);
             TempDir = new TempDirManager("MatiGenTest");
             Decompiler = new Decompiler(TempDir);
 
-            population.InitializeRandomPopulation(500, 1, 10);
+            population.InitializeRandomPopulation(100, 1, 10);
             population.ProcessGeneration();
 
             GPGenome bestGenome = population.GetBestGenome();
@@ -37,6 +39,8 @@ namespace MatiGenConsole
                 Console.WriteLine("Best genome code: ");
                 Console.WriteLine(Decompiler.DecompileExpression(bestGenome.FinalExpression));
             }
+
+            Console.ReadKey();
         }
 
         static void InitializeProblem()

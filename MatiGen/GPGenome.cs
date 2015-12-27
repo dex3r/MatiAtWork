@@ -30,8 +30,8 @@ namespace MatiGen
 
         public LambdaExpression FinalExpression
         {
-            get 
-            { 
+            get
+            {
                 return _expression;
             }
             set
@@ -75,7 +75,7 @@ namespace MatiGen
             {
                 CachedDelegate = FinalExpression.Compile();
             }
-            catch 
+            catch
             {
                 // Used expression have compile errors. Handle it.
             }
@@ -98,11 +98,11 @@ namespace MatiGen
 
         public void Mutate(int expressionsToAddCount, ProblemBase problem, MutationSettings settings)
         {
-            if(expressionsToAddCount < 0)
+            if (expressionsToAddCount < 0)
             {
                 int expressionToRemoveCount = -expressionsToAddCount;
 
-                for(int i = 0; i < expressionToRemoveCount; i++)
+                for (int i = 0; i < expressionToRemoveCount; i++)
                 {
                     int res = RAND.Next(UsedExpressions.Count);
 
@@ -111,11 +111,11 @@ namespace MatiGen
 
                 RebuildFinalExpression(problem);
             }
-            else if(expressionsToAddCount > 0)
+            else if (expressionsToAddCount > 0)
             {
-                // Bad. Select random point in expression tree and add new Expression there (with all used expressions as params or just previous to the new one??)
+                //TODO: Bad. Select random point in expression tree and add new Expression there (with all used expressions as params or just previous to the new one??)
 
-                for(int i = 0; i < expressionsToAddCount; i++)
+                for (int i = 0; i < expressionsToAddCount; i++)
                 {
                     AddRandomExpression(problem, settings);
                 }
@@ -130,12 +130,30 @@ namespace MatiGen
 
             Expression expToAdd = factory.Create(problem.Parameters, UsedExpressions);
 
-            UsedExpressions.Add(expToAdd);
+            if (expToAdd != null)
+            {
+                UsedExpressions.Add(expToAdd);
+            }
+            else
+            {
+                //TODO: Could not create expression from factory for some reason.
+                //TODO: Possible handle it (ie. report that expression was not added)
+            }
         }
 
         public void RebuildFinalExpression(ProblemBase problem)
         {
-            BlockExpression body = Expression.Block(UsedExpressions);
+            BlockExpression body;
+
+            if(UsedExpressions.Count > 0)
+            {
+                body = Expression.Block(UsedExpressions);
+            }
+            else
+            {
+                body = Expression.Block(Expression.Empty());
+            }
+
             FinalExpression = Expression.Lambda(body, problem.Parameters);
         }
     }

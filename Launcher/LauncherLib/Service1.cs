@@ -7,7 +7,6 @@ using System.Text;
 using System.Net;
 using System.Diagnostics;
 using System.IO;
-using Utils;
 using System.IO.Compression;
 
 namespace LauncherLib

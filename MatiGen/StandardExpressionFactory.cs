@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace MatiGen
 {
@@ -29,7 +30,14 @@ namespace MatiGen
                 exprs[i] = Enumerable.Empty<Expression>().Random(RAND, expressions);
             }
 
-            return (Expression)targetDelegate.DynamicInvoke(exprs);
+            try
+            {
+                return (Expression)targetDelegate.DynamicInvoke(exprs);
+            }
+            catch(TargetInvocationException)
+            {
+                return null;
+            }
         }
     }
 }

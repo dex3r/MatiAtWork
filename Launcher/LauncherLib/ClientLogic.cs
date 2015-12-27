@@ -6,7 +6,6 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Utils;
 using System.ServiceModel;
 
 namespace LauncherLib

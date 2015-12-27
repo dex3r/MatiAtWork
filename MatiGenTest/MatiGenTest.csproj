@@ -32,15 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.Decompiler">
-      <HintPath>..\..\..\Users\DeX3r\Downloads\ILSpy_Master_2.3.1.1865_Binaries\ICSharpCode.Decompiler.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\..\..\Users\DeX3r\Downloads\ILSpy_Master_2.3.1.1865_Binaries\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Pdb">
-      <HintPath>..\..\..\Users\DeX3r\Downloads\ILSpy_Master_2.3.1.1865_Binaries\Mono.Cecil.Pdb.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
