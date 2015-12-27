@@ -224,7 +224,7 @@ namespace MatiGenTesta
 
             var parameters = new ParameterExpression[] { result, loopCounter };
             BlockExpression block = Expression.Block(parameters, initLoop, loop, result);
-            //BlockExpression block = Expression.Block(parameters, initLoop, loop, result);
+            //BlockExpression block = FinalExpression.Block(parameters, initLoop, loop, result);
 
             multiplication = Expression.Lambda<Func<int, int, int>>(block, paramA, paramB);
 

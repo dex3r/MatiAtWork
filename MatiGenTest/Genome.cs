@@ -9,7 +9,7 @@ namespace MatiGenTest
 {
     public class Genome
     {
-        //public static List<Expression> AllExpressions;
+        //public static List<FinalExpression> AllExpressions;
 
         //static Genome()
         //{
@@ -30,10 +30,10 @@ namespace MatiGenTest
         //    BlockExpression block = BlockExpression.Block();
         //    var exps = block.Expressions;
 
-        //    //var lambda = Expression.Lambda<Func<int, int>>(block);
+        //    //var lambda = FinalExpression.Lambda<Func<int, int>>(block);
         //    //lambda.
 
-        //    List<Expression> newExps = exps.ToList();
+        //    List<FinalExpression> newExps = exps.ToList();
         //    //newExps.ElementAt(0).ReduceExtensions
         //}
 

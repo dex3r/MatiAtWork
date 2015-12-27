@@ -9,6 +9,8 @@ namespace MatiGen
 {
     public class GPGenome
     {
+        protected readonly static Random RAND = new Random();
+
         private double? _fitness;
         public double? Fitness
         {
@@ -18,7 +20,7 @@ namespace MatiGen
 
         private List<Expression> _UsedExpression;
 
-        public List<Expression> UsedExpression
+        public List<Expression> UsedExpressions
         {
             get { return _UsedExpression; }
             set { _UsedExpression = value; }
@@ -26,9 +28,12 @@ namespace MatiGen
 
         private LambdaExpression _expression;
 
-        public LambdaExpression Expression
+        public LambdaExpression FinalExpression
         {
-            get { return _expression; }
+            get 
+            { 
+                return _expression;
+            }
             set
             {
                 if (!ReferenceEquals(_expression, value))
@@ -61,28 +66,77 @@ namespace MatiGen
 
         public Delegate TryCreateDelegate()
         {
-            if (Expression == null)
+            if (FinalExpression == null)
             {
                 return null;
             }
 
             try
             {
-                CachedDelegate = Expression.Compile();
+                CachedDelegate = FinalExpression.Compile();
             }
-            catch { }
+            catch 
+            {
+                // Used expression have compile errors. Handle it.
+            }
 
             return CachedDelegate;
         }
 
-        public void InitializeRandomGenome(int expressions)
+        public void InitializeRandomGenome(int expressions, ProblemBase problem, MutationSettings settings)
         {
+            UsedExpressions = new List<Expression>();
+            Random r = new Random();
 
+            for (int i = 0; i < expressions; i++)
+            {
+                AddRandomExpression(problem, settings);
+            }
+
+            RebuildFinalExpression(problem);
         }
 
-        public void Mutate(int expressionToAdd)
+        public void Mutate(int expressionsToAddCount, ProblemBase problem, MutationSettings settings)
         {
-            
+            if(expressionsToAddCount < 0)
+            {
+                int expressionToRemoveCount = -expressionsToAddCount;
+
+                for(int i = 0; i < expressionToRemoveCount; i++)
+                {
+                    int res = RAND.Next(UsedExpressions.Count);
+
+                    UsedExpressions.RemoveAt(res);
+                }
+
+                RebuildFinalExpression(problem);
+            }
+            else if(expressionsToAddCount > 0)
+            {
+                // Bad. Select random point in expression tree and add new Expression there (with all used expressions as params or just previous to the new one??)
+
+                for(int i = 0; i < expressionsToAddCount; i++)
+                {
+                    AddRandomExpression(problem, settings);
+                }
+
+                RebuildFinalExpression(problem);
+            }
+        }
+
+        private void AddRandomExpression(ProblemBase problem, MutationSettings settings)
+        {
+            IExpressionFactory factory = settings.AvailableExpressions.Random(RAND);
+
+            Expression expToAdd = factory.Create(problem.Parameters, UsedExpressions);
+
+            UsedExpressions.Add(expToAdd);
+        }
+
+        public void RebuildFinalExpression(ProblemBase problem)
+        {
+            BlockExpression body = Expression.Block(UsedExpressions);
+            FinalExpression = Expression.Lambda(body, problem.Parameters);
         }
     }
 }

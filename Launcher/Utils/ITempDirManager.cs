@@ -4,10 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Utils
+public interface ITempDirManager
 {
-    public interface ITempDirManager
-    {
-        string GetTempDirectoryPath();
-    }
+    string GetTempDirectoryPath();
 }

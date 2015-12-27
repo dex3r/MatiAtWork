@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace MatiGen.Problems
 {
-    public sealed class AddingProblem : Problem<Func<double, double, double>>
+    public sealed class AddingProblem : ProblemBase
     {
         private List<Tuple<double, double, double>> trials = new List<Tuple<double, double, double>>();
 
         public AddingProblem()
+            : base()
         {
             trials.Add(CreateTest(5, 5));
             trials.Add(CreateTest(7, 6));
             trials.Add(CreateTest(23, 90));
         }
 
-        public double Evaluate(Func<double, double, double> solverMethod)
+        public double Evaluate(Delegate solverMethod)
         {
+            var addingMethod = (Func<double, double, double>)solverMethod;
+
             int validCount = 0;
 
             for (int j = 0; j < trials.Count; j++)
@@ -27,7 +31,7 @@ namespace MatiGen.Problems
 
                 try
                 {
-                    double result = solverMethod(validRes.Item2, validRes.Item3);
+                    double result = addingMethod(validRes.Item2, validRes.Item3);
 
                     if (Math.Abs(result - validRes.Item1) < 0.001f)
                     {
@@ -49,6 +53,11 @@ namespace MatiGen.Problems
         {
             Func<double, double, double> validSolution = (xa, xb) => xa + xb;
             return new Tuple<double, double, double>(validSolution(a, b), a, b);
+        }
+
+        protected override IEnumerable<System.Linq.Expressions.ParameterExpression> CreateParameters()
+        {
+            return new ParameterExpression[] { Expression.Parameter(typeof(double), "a"), Expression.Parameter(typeof(double), "b") };
         }
     }
 }

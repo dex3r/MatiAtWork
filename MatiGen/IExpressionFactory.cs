@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace MatiGen
 {
-    public interface Problem<TDelegate>
+    public interface IExpressionFactory
     {
-        float Evaluate(TDelegate solverMethod);
+        Expression Create(params IEnumerable<Expression>[] expressions);
     }
 }
