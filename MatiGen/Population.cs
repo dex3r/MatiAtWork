@@ -9,6 +9,8 @@ namespace MatiGen
 {
     public class Population
     {
+        protected readonly static Random RAND = new Random();
+
         private ProblemBase _problem;
 
         public ProblemBase Problem
@@ -52,53 +54,70 @@ namespace MatiGen
         {
             this.Problem = problem;
 
-            MutationSettings = new MutationSettings(GenerateExpressionsFactories());
+            MutationSettings = new MutationSettings(GenerateExpressionsFactories(), 0.6, 3);
         }
 
         private IEnumerable<IExpressionFactory> GenerateExpressionsFactories()
         {
             return new IExpressionFactory[] {
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Add),
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Subtract),
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Divide),
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Multiply),
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Modulo),
+                //new StandardExpressionFactory((Func<Expression>)(() => Expression.Variable(typeof(int)))),
+                //new StandardExpressionFactory((Func<Expression>)(() => Expression.Variable(typeof(double)))),
+                //new StandardExpressionFactory((Func<Expression>)(() => Expression.Variable(typeof(bool)))),
+
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Add),
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Subtract),
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Divide),
+               // new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Multiply),
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Modulo),
 
                 new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.LessThan),
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.LessThanOrEqual),
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.GreaterThan),
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.GreaterThanOrEqual),
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Equal),
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.NotEqual),
+                new StandardExpressionFactory((Func<Expression>)Expression.Quote)
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.LessThanOrEqual),
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.GreaterThan),
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.GreaterThanOrEqual),
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Equal),
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.NotEqual),
 
                 new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.IfThen),
-                new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression>)Expression.IfThenElse),
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression>)Expression.IfThenElse),
 
-                new StandardExpressionFactory((Func<Expression, Expression>)Expression.PostDecrementAssign),
-                new StandardExpressionFactory((Func<Expression, Expression>)Expression.PostIncrementAssign),
+                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Assign),
 
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.And),
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Or),
-                new StandardExpressionFactory((Func<Expression, Expression>)Expression.Not),
+                //new StandardExpressionFactory((Func<Expression, Expression>)Expression.PostDecrementAssign),
+                //new StandardExpressionFactory((Func<Expression, Expression>)Expression.PostIncrementAssign),
 
-                new StandardExpressionFactory((Func<Expression, Expression>)(x => Expression.Call((((Func<double, double>)Math.Sin)).Method, x))),
-                new StandardExpressionFactory((Func<Expression, Expression>)(x => Expression.Call((((Func<double, double>)Math.Cos)).Method, x))),
-                new StandardExpressionFactory((Func<Expression, Expression>)(x => Expression.Call((((Func<double, double>)Math.Abs)).Method, x))),
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.And),
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Or),
+                //new StandardExpressionFactory((Func<Expression, Expression>)Expression.Not),
+                //new StandardExpressionFactory((Func<Expression, Expression>)Expression.IsTrue),
 
-                new ConstantExpressionFactory(Expression.Constant(Math.E)),
-                new ConstantExpressionFactory(Expression.Constant(Math.PI)),
-                new ConstantExpressionFactory(Expression.Constant(1)),
-                new ConstantExpressionFactory(Expression.Constant(-1)),
+                //new StandardExpressionFactory((Func<Expression, Expression>)(x => Expression.Call((((Func<double, double>)Math.Sin)).Method, x))),
+                //new StandardExpressionFactory((Func<Expression, Expression>)(x => Expression.Call((((Func<double, double>)Math.Cos)).Method, x))),
+                //new StandardExpressionFactory((Func<Expression, Expression>)(x => Expression.Call((((Func<double, double>)Math.Abs)).Method, x))),
 
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Block),
-                new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression>)Expression.Block),
-                new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression, Expression>)Expression.Block),
-                new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression, Expression, Expression>)Expression.Block),
+                //new ConstantExpressionFactory(Expression.Constant(Math.E)),
+                //new ConstantExpressionFactory(Expression.Constant(Math.PI)),
+                //new ConstantExpressionFactory(Expression.Constant(1)),
+                //new ConstantExpressionFactory(Expression.Constant(-1)),
+                //new ConstantExpressionFactory(Expression.Constant(0)),
+
+                //new RandomNumberExpressionFactory(RandomNumberType.Integer),
+                //new RandomNumberExpressionFactory(RandomNumberType.Double),
+
+                // These won't work this way (LabelTarter is not a subclass of Expression)
+                //new StandardExpressionFactory((Func<Expression, LabelTarget, Expression>)((arg1, label) => Expression.Return(label, arg1))),
+                //new StandardExpressionFactory((Func<LabelTarget>)Expression.Label),
+
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Block),
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression>)Expression.Block),
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression, Expression>)Expression.Block),
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression, Expression, Expression>)Expression.Block),
             };
         }
 
         public void InitializeRandomPopulation(int size, int minComplexity, int maxComplexity)
         {
+            Generation = 0;
             this.Size = size;
 
             Genomes = new List<GPGenome>();
@@ -115,8 +134,63 @@ namespace MatiGen
 
         public void ProcessGeneration()
         {
-            Generation++;
+            if (Generation != 0)
+            {
+                // Clone best genome
+                GPGenome bestGenome = GetBestGenome();
 
+                if (bestGenome != null)
+                {
+                    //TODO: Very inefficient algorithm
+                    for (int i = 0; i < 1; i++)
+                    {
+                        var newList = Genomes.Where(x => !Object.ReferenceEquals(x, bestGenome)).ToList();
+                        newList.RemoveAt(RAND.Next(newList.Count));
+
+                        newList.Add(bestGenome);
+                        Genomes = newList;
+
+                        Genomes.Add(bestGenome.Clone());
+                    }
+                }
+
+                MutateGenomes();
+            }
+            else
+            {
+                EvaluateGenomes();
+            }
+
+            Generation++;
+        }
+
+        private void MutateGenomes()
+        {
+            GPGenome bestGenome = GetBestGenome();
+
+            for (int i = 0; i < Genomes.Count; i++)
+            {
+                GPGenome genome = Genomes[i];
+
+                if (bestGenome != null && Object.ReferenceEquals(bestGenome, genome))
+                {
+                    continue;
+                }
+
+                GPGenome clone = genome.Clone();
+                clone.Mutate(Problem, MutationSettings);
+                clone.Fitness = Problem.Evaluate(clone.CachedDelegate);
+
+                if (clone.Fitness.Value >= genome.Fitness.Value)
+                {
+                    Genomes.RemoveAt(i);
+                    Genomes.Insert(i, clone);
+                }
+            }
+        }
+
+        private void EvaluateGenomes()
+        {
             for (int i = 0; i < Genomes.Count; i++)
             {
                 GPGenome genome = Genomes[i];

@@ -44,45 +44,53 @@ namespace MatiGen
         {
             lock (decompileLock)
             {
-                AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain
-                    .DefineDynamicAssembly(new AssemblyName("GeneratedAssembly"), AssemblyBuilderAccess.Save, dllFileFullPathDir);
-
-                ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("GeneratedModule", dllFileName, true);
-                TypeBuilder typeBuilder = moduleBuilder.DefineType("GeneratedType", TypeAttributes.Class | TypeAttributes.Public);
-
-                MethodBuilder methodBuilder = typeBuilder
-                    .DefineMethod("GeneratedMethod", MethodAttributes.Public | MethodAttributes.Static);
-
-                expression.CompileToMethod(methodBuilder);
-
-                typeBuilder.CreateType();
-                assemblyBuilder.Save(dllFileName);
-
-                AssemblyDefinition assemblyDefinition = AssemblyDefinition.ReadAssembly(dllFileFullPath);
-
-                // This code assumes that there is only one module in given assembly
-                ModuleDefinition moduleDefinition = assemblyDefinition.Modules.First();
-
-                DecompilerSettings decompilerSettings = new DecompilerSettings();
-
-                DecompilerContext decompilerContext = new DecompilerContext(moduleDefinition)
+                try
                 {
-                    CancellationToken = CancellationToken.None,
-                    // This code assumes that there is only one type in given module
-                    CurrentType = moduleDefinition.Types.First(),
-                    Settings = decompilerSettings
-                };
-                AstBuilder astBuilder = new AstBuilder(decompilerContext);
+                    AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain
+                        .DefineDynamicAssembly(new AssemblyName("GeneratedAssembly"), AssemblyBuilderAccess.Save, dllFileFullPathDir);
 
-                astBuilder.AddAssembly(moduleDefinition, false);
-                astBuilder.RunTransformations();
+                    ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("GeneratedModule", dllFileName, true);
+                    TypeBuilder typeBuilder = moduleBuilder.DefineType("GeneratedType", TypeAttributes.Class | TypeAttributes.Public);
 
-                using (StringWriter stringWriter = new StringWriter())
+                    MethodBuilder methodBuilder = typeBuilder
+                        .DefineMethod("GeneratedMethod", MethodAttributes.Public | MethodAttributes.Static);
+
+                    expression.CompileToMethod(methodBuilder);
+
+                    typeBuilder.CreateType();
+                    assemblyBuilder.Save(dllFileName);
+
+                    AssemblyDefinition assemblyDefinition = AssemblyDefinition.ReadAssembly(dllFileFullPath);
+
+                    // This code assumes that there is only one module in given assembly
+                    ModuleDefinition moduleDefinition = assemblyDefinition.Modules.First();
+
+                    DecompilerSettings decompilerSettings = new DecompilerSettings();
+
+                    DecompilerContext decompilerContext = new DecompilerContext(moduleDefinition)
+                    {
+                        CancellationToken = CancellationToken.None,
+                        // This code assumes that there is only one type in given module
+                        CurrentType = moduleDefinition.Types.First(),
+                        Settings = decompilerSettings
+                    };
+                    AstBuilder astBuilder = new AstBuilder(decompilerContext);
+
+                    astBuilder.AddAssembly(moduleDefinition, false);
+                    astBuilder.RunTransformations();
+
+                    using (StringWriter stringWriter = new StringWriter())
+                    {
+                        ITextOutput textOutput = new ICSharpCode.Decompiler.PlainTextOutput(stringWriter);
+                        astBuilder.GenerateCode(textOutput);
+
+                        return stringWriter.ToString();
+                    }
+                }
+                catch
                 {
-                    ITextOutput textOutput = new ICSharpCode.Decompiler.PlainTextOutput(stringWriter);
-                    astBuilder.GenerateCode(textOutput);
-
-                    return stringWriter.ToString();
+                    //? ????
+                    return "ERROR";
                 }
             }
         }

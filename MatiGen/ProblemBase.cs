@@ -17,6 +17,11 @@ namespace MatiGen
             protected set { _Parameters = value; }
         }
 
+        public abstract Type MethodReturnType
+        {
+            get;
+        }
+
         public ProblemBase()
         {
             Parameters = CreateParameters();

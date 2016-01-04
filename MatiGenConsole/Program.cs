@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MatiGen;
 using MatiGen.Problems;
+using System.Linq.Expressions;
 
 namespace MatiGenConsole
 {
@@ -24,23 +25,52 @@ namespace MatiGenConsole
             TempDir = new TempDirManager("MatiGenTest");
             Decompiler = new Decompiler(TempDir);
 
-            population.InitializeRandomPopulation(100, 1, 10);
+            PopInit();
             population.ProcessGeneration();
 
             GPGenome bestGenome = population.GetBestGenome();
+            Report(bestGenome);
 
-            if (bestGenome == null)
+            while (true)
+            {
+                //PopInit();
+                population.ProcessGeneration();
+
+                bestGenome = population.GetBestGenome();
+                Report(bestGenome);
+            }
+
+            Console.ReadKey();
+        }
+
+        private static void PopInit()
+        {
+            population.InitializeRandomPopulation(10, 1, 1);
+        }
+
+        private static void Report(GPGenome genome)
+        {
+            if (genome == null)
             {
                 Console.WriteLine("There is no best genome");
             }
             else
             {
-                Console.WriteLine("Best genome fitness: " + bestGenome.Fitness.Value);
                 Console.WriteLine("Best genome code: ");
-                Console.WriteLine(Decompiler.DecompileExpression(bestGenome.FinalExpression));
-            }
+                Console.WriteLine(Decompiler.DecompileExpression(genome.FinalExpression));
 
-            Console.ReadKey();
+                Console.WriteLine("Generation: " + population.Generation);
+                Console.WriteLine("Best genome fitness: " + genome.Fitness.Value);
+                Console.WriteLine("Average value: " + RevertFitness(genome.Fitness.Value));
+
+                int variablesCount = genome.UsedExpressions.Where(x => typeof(ParameterExpression).IsAssignableFrom(x.GetType())).Count();
+                Console.WriteLine("Variables count: " + variablesCount);
+            }
+        }
+
+        private static double RevertFitness(double fitness)
+        {
+            return Math.Pow(fitness, 1.0 / 14.205) * 21;
         }
 
         static void InitializeProblem()

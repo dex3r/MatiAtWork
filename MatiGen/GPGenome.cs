@@ -64,6 +64,18 @@ namespace MatiGen
             }
         }
 
+        public GPGenome Clone()
+        {
+            GPGenome clone = new GPGenome();
+
+            clone.UsedExpressions = new List<Expression>(UsedExpressions);
+            clone.FinalExpression = FinalExpression;
+            clone.Fitness = Fitness;
+            clone.CachedDelegate = CachedDelegate;
+
+            return clone;
+        }
+
         public Delegate TryCreateDelegate()
         {
             if (FinalExpression == null)
@@ -80,7 +92,7 @@ namespace MatiGen
                 // Used expression have compile errors. Handle it.
             }
 
-            return CachedDelegate;
+            return _cachedDelegate;
         }
 
         public void InitializeRandomGenome(int expressions, ProblemBase problem, MutationSettings settings)
@@ -96,43 +108,52 @@ namespace MatiGen
             RebuildFinalExpression(problem);
         }
 
-        public void Mutate(int expressionsToAddCount, ProblemBase problem, MutationSettings settings)
+        public void Mutate(ProblemBase problem, MutationSettings settings)
         {
-            if (expressionsToAddCount < 0)
+            double reduceRand = RAND.NextDouble();
+
+            int expressionsToAddCount = RAND.Next(1, settings.MaxNodesToAdd + 1);
+
+            if (settings.ReduceChance > reduceRand)
             {
-                int expressionToRemoveCount = -expressionsToAddCount;
-
-                for (int i = 0; i < expressionToRemoveCount; i++)
+                if (expressionsToAddCount < UsedExpressions.Count)
                 {
-                    int res = RAND.Next(UsedExpressions.Count);
+                    int d = expressionsToAddCount;
+                    if (d < UsedExpressions.Count)
+                    {
+                        expressionsToAddCount = d;
+                    }
 
-                    UsedExpressions.RemoveAt(res);
+                    for (int i = 0; i < expressionsToAddCount; i++)
+                    {
+                        int res = RAND.Next(UsedExpressions.Count);
+
+                        UsedExpressions.RemoveAt(res);
+                    }
                 }
 
                 RebuildFinalExpression(problem);
             }
             else if (expressionsToAddCount > 0)
             {
-                //TODO: Bad. Select random point in expression tree and add new Expression there (with all used expressions as params or just previous to the new one??)
-
                 for (int i = 0; i < expressionsToAddCount; i++)
                 {
-                    AddRandomExpression(problem, settings);
+                    int pos = RAND.Next(UsedExpressions.Count);
+                    AddRandomExpression(problem, settings, pos);
                 }
 
                 RebuildFinalExpression(problem);
             }
         }
 
-        private void AddRandomExpression(ProblemBase problem, MutationSettings settings)
+        private void AddRandomExpression(ProblemBase problem, MutationSettings settings, int index)
         {
-            IExpressionFactory factory = settings.AvailableExpressions.Random(RAND);
-
-            Expression expToAdd = factory.Create(problem.Parameters, UsedExpressions);
+            // Possibly use only expression that are already defined in this point of expressions tree (below 'index' in 'UsedExpressions')
+            var expToAdd = RandomizeExpression(problem, settings);
 
             if (expToAdd != null)
             {
-                UsedExpressions.Add(expToAdd);
+                UsedExpressions.Insert(index, expToAdd);
             }
             else
             {
@@ -141,13 +162,58 @@ namespace MatiGen
             }
         }
 
+        private void AddRandomExpression(ProblemBase problem, MutationSettings settings)
+        {
+            AddRandomExpression(problem, settings, UsedExpressions.Count);
+        }
+
+        private Expression RandomizeExpression(ProblemBase problem, MutationSettings settings)
+        {
+            IExpressionFactory factory = settings.AvailableExpressions.Random(RAND);
+            return factory.Create(problem.Parameters, UsedExpressions);
+        }
+
         public void RebuildFinalExpression(ProblemBase problem)
         {
             BlockExpression body;
 
-            if(UsedExpressions.Count > 0)
+            if (UsedExpressions.Count > 0)
             {
-                body = Expression.Block(UsedExpressions);
+                var finalExpressions = UsedExpressions.Where(x => !typeof(ParameterExpression).IsAssignableFrom(x.GetType())).Where(x => !UsedExpressions.Any(y =>
+                    {
+                        BlockExpression block = y as BlockExpression;
+
+                        if (block != null)
+                        {
+                            if (block.Expressions.Any(z => Object.ReferenceEquals(z, x)))
+                            {
+                                return true;
+                            }
+                        }
+
+                        return false;
+                    }));
+               
+                var variables = UsedExpressions.Where(x => typeof(ParameterExpression).IsAssignableFrom(x.GetType())).Cast<ParameterExpression>();
+
+                var validLastExpressions = finalExpressions.Concat(variables).Where(x => problem.MethodReturnType.IsAssignableFrom(x.Type));
+                Expression lastExpression = null;
+
+                if (validLastExpressions.Count() > 0)
+                {
+                    lastExpression = validLastExpressions.Random(RAND);
+
+                    finalExpressions = finalExpressions.Concat(Enumerable.Repeat(lastExpression, 1));
+                }
+
+                //System.Diagnostics.Debug.WriteLine("Last expression: " + lastExpression.GetType() + " nodeType: " + lastExpression.NodeType);
+
+                if (finalExpressions.Count() == 0)
+                {
+                    finalExpressions = Enumerable.Repeat(Expression.Empty(), 1);
+                }
+
+                body = Expression.Block(variables, finalExpressions);
             }
             else
             {

@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D6416955-2314-4193-8D7F-8B2DD94B18D6}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{B43DF9E2-4FE7-4483-9534-2E010A6AC9E0}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MatiGen</RootNamespace>
-    <AssemblyName>MatiGen</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>BlackJackGenerator</RootNamespace>
+    <AssemblyName>BlackJackGenerator</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,18 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.Decompiler">
-      <HintPath>..\Libs\ICSharpCode.Decompiler.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory">
-      <HintPath>..\Libs\ICSharpCode.NRefactory.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory.CSharp">
-      <HintPath>..\Libs\ICSharpCode.NRefactory.CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\Libs\Mono.Cecil.dll</HintPath>
-    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,29 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConstantExpressionFactory.cs" />
-    <Compile Include="Decompiler.cs" />
-    <Compile Include="GPGenome.cs" />
-    <Compile Include="IDecompiler.cs" />
-    <Compile Include="IExpressionFactory.cs" />
-    <Compile Include="MutationSettings.cs" />
-    <Compile Include="Population.cs" />
-    <Compile Include="Problem.cs" />
-    <Compile Include="ProblemBase.cs" />
-    <Compile Include="Problems\AddingProblem.cs" />
-    <Compile Include="Problems\BlackjackProblem.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomNumberExpressionFactory.cs" />
-    <Compile Include="StandardExpressionFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Launcher\Utils\Utils.csproj">
       <Project>{0e2505fb-2771-4697-99ab-12fa966770c4}</Project>
       <Name>Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpNEAT\src\SharpNeatLib\SharpNeatLib.csproj">
-      <Project>{abc5c77a-deba-420c-926c-bd3e6f37ae15}</Project>
-      <Name>SharpNeatLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

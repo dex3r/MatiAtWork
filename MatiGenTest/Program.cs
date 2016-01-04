@@ -28,6 +28,13 @@ namespace MatiGenTesta
             TempDir = new TempDirManager("MatiGenTest");
             Decompiler = new Decompiler(TempDir);
 
+            Test2();
+
+            Console.ReadKey();
+        }
+
+        private static void MainTest()
+        {
             // Binary:
             binaryExps.Add(Expression.Add);
             binaryExps.Add(Expression.Subtract);
@@ -56,8 +63,6 @@ namespace MatiGenTesta
             ternaryExps.Add(Expression.IfThenElse);
 
             DoProblem();
-
-            Console.ReadKey();
         }
 
         static void DoProblem()
@@ -233,6 +238,38 @@ namespace MatiGenTesta
             Console.WriteLine("Result (3, 5): " + r);
 
             Console.WriteLine(Decompiler.DecompileExpression(multiplication));
+        }
+
+        private static void Test2()
+        {
+            Expression<Func<int, int>> boolTest;
+
+            ParameterExpression currentSum = Expression.Parameter(typeof(int), "currentSum");
+
+            ParameterExpression var1 = Expression.Variable(typeof(int));
+            ParameterExpression[] vars = { var1 };
+
+            Expression one = Expression.Constant(1);
+
+            Expression ao = Expression.Assign(var1, one);
+
+            Expression zero = Expression.Constant(0);
+            Expression gt = Expression.GreaterThan(currentSum, one);
+            Expression acz = Expression.Assign(var1, zero);
+            Expression ifExp = Expression.IfThen(gt, acz);
+
+            BlockExpression block = Expression.Block(vars, var1, one, ao, zero, ifExp, var1);
+            boolTest = Expression.Lambda<Func<int, int>>(block, currentSum);
+
+            Console.WriteLine("Body: " + boolTest.Body);
+            Console.WriteLine("Block type: " + boolTest.Type);
+
+            var l = boolTest.Compile();
+            var r = l(0);
+
+            Console.WriteLine("Result: " + r);
+
+            Console.WriteLine(Decompiler.DecompileExpression(boolTest));
         }
     }
 }

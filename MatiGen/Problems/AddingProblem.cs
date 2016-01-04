@@ -9,6 +9,11 @@ namespace MatiGen.Problems
 {
     public sealed class AddingProblem : ProblemBase
     {
+        public override Type MethodReturnType
+        {
+            get { return typeof(double); }
+        }
+
         private List<Tuple<double, double, double>> trials = new List<Tuple<double, double, double>>();
 
         public AddingProblem()
@@ -23,7 +28,7 @@ namespace MatiGen.Problems
         {
             var addingMethod = solverMethod as Func<double, double, double>;
 
-            if(addingMethod == null)
+            if (addingMethod == null)
             {
                 return 0f;
             }
@@ -49,14 +54,24 @@ namespace MatiGen.Problems
                 }
             }
 
-            double fitness = validCount / trials.Count;
+            double fitness = (double)validCount / trials.Count;
 
             return fitness;
         }
 
         private static Tuple<double, double, double> CreateTest(double a, double b)
         {
-            Func<double, double, double> validSolution = (xa, xb) => xa + xb;
+            Func<double, double, double> validSolution = (xa, xb) =>
+                {
+                    if(xa > xb)
+                    {
+                        return xa;
+                    }
+                    else
+                    {
+                        return xb;
+                    }
+                };
             return new Tuple<double, double, double>(validSolution(a, b), a, b);
         }
 

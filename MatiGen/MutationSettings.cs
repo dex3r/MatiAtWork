@@ -17,9 +17,27 @@ namespace MatiGen
             private set { _AvailableExpressions = value; }
         }
 
-        public MutationSettings(IEnumerable<IExpressionFactory> availableExpressions)
+        private double _reduceChance;
+
+        public double ReduceChance
+        {
+            get { return _reduceChance; }
+            private set { _reduceChance = value; }
+        }
+
+        private int _maxNodesToAdd;
+
+        public int MaxNodesToAdd
+        {
+            get { return _maxNodesToAdd; }
+            private set { _maxNodesToAdd = value; }
+        }
+
+        public MutationSettings(IEnumerable<IExpressionFactory> availableExpressions, double reduceChance, int maxNodesToAddAmount)
         {
             this.AvailableExpressions = availableExpressions;
+            this.ReduceChance = reduceChance;
+            this.MaxNodesToAdd = maxNodesToAddAmount;
         }
     }
 }
