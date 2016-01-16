@@ -9,6 +9,6 @@ namespace MatiGen
 {
     public interface IExpressionFactory
     {
-        Expression Create(params IEnumerable<Expression>[] expressions);
+        Expression Create(IEnumerable<Expression> expressions);
     }
 }

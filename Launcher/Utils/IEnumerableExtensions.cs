@@ -12,6 +12,18 @@ public static class IEnumerableExtensions
         return enumerable.ElementAt(random.Next(enumerable.Count()));
     }
 
+    public static T RandomOrDefault<T>(this IEnumerable<T> enumerable, Random random)
+    {
+        int enumCount = enumerable.Count();
+
+        if (enumCount == 0)
+        {
+            return default(T);
+        }
+
+        return enumerable.ElementAt(random.Next(enumCount));
+    }
+
     /// <summary>
     /// Randomizes one element from this and given additional collections.
     /// </summary>
@@ -53,5 +65,10 @@ public static class IEnumerableExtensions
         }
 
         throw new Exception("This should never happen. This method logic is all wrong.");
+    }
+
+    public static bool IsEmpty<T>(this IEnumerable<T> enumerable)
+    {
+        return !enumerable.GetEnumerator().MoveNext();
     }
 }

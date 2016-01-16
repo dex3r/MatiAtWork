@@ -18,7 +18,7 @@ namespace MatiGen
             this.type = type;
         }
 
-        public Expression Create(params IEnumerable<Expression>[] expressions)
+        public Expression Create(IEnumerable<Expression> expressions)
         {
             if (type == RandomNumberType.Integer)
             {

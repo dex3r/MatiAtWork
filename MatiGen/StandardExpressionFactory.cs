@@ -11,33 +11,65 @@ namespace MatiGen
     public class StandardExpressionFactory : IExpressionFactory
     {
         protected readonly static Random RAND = new Random();
+        protected readonly static Func<Expression, bool> DEFAULT_SELECTOR = (exp) => true;
 
         private Delegate targetDelegate;
         private int parametersCount;
 
-        public StandardExpressionFactory(Delegate expressionFactoryMethod)
+        Func<Expression, bool>[] paramsSelectors;
+
+        public StandardExpressionFactory(Delegate expressionFactoryMethod, params Func<Expression, bool>[] paramsSelectors)
         {
             this.targetDelegate = expressionFactoryMethod;
             this.parametersCount = expressionFactoryMethod.Method.GetParameters().Length;
+            this.paramsSelectors = paramsSelectors;
+
+            if (paramsSelectors.Length == 0)
+            {
+                this.paramsSelectors = Enumerable.Repeat(DEFAULT_SELECTOR, parametersCount).ToArray();
+            }
         }
 
-        public Expression Create(params IEnumerable<Expression>[] expressions)
+        public virtual Expression Create(IEnumerable<Expression> expressions)
         {
             Expression[] exprs = new Expression[parametersCount];
 
-            for (int i = 0; i < exprs.Length; i++)
-            {
-                exprs[i] = Enumerable.Empty<Expression>().Random(RAND, expressions);
-            }
-
-            try
-            {
-                return (Expression)targetDelegate.DynamicInvoke(exprs);
-            }
-            catch(TargetInvocationException)
+            if (!SelectExpressions(expressions, exprs))
             {
                 return null;
             }
+
+            //try
+            {
+                return (Expression)targetDelegate.DynamicInvoke(exprs);
+            }
+            //catch(TargetInvocationException)
+            {
+                //return null;
+            }
+        }
+
+        public virtual bool SelectExpressions(IEnumerable<Expression> availableExpressions, Expression[] outputExpressions)
+        {
+            for (int i = 0; i < outputExpressions.Length; i++)
+            {
+                var selector = paramsSelectors[i];
+                var validExprs = availableExpressions;
+
+                if (selector != DEFAULT_SELECTOR)
+                {
+                    validExprs = availableExpressions.Where(selector);
+                }
+
+                if (validExprs.IsEmpty())
+                {
+                    return false;
+                }
+
+                outputExpressions[i] = validExprs.Random(RAND);
+            }
+
+            return true;
         }
     }
 }

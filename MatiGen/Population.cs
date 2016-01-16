@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using MatiGen.Problems;
 
 namespace MatiGen
 {
@@ -54,37 +55,62 @@ namespace MatiGen
         {
             this.Problem = problem;
 
-            MutationSettings = new MutationSettings(GenerateExpressionsFactories(), 0.6, 3);
+            MutationSettings = new MutationSettings(GenerateExpressionsFactories(), 0.6, 9);
         }
 
         private IEnumerable<IExpressionFactory> GenerateExpressionsFactories()
         {
             return new IExpressionFactory[] {
                 //new StandardExpressionFactory((Func<Expression>)(() => Expression.Variable(typeof(int)))),
-                //new StandardExpressionFactory((Func<Expression>)(() => Expression.Variable(typeof(double)))),
+                new StandardExpressionFactory((Func<Expression>)(() => Expression.Variable(typeof(int)))),
                 //new StandardExpressionFactory((Func<Expression>)(() => Expression.Variable(typeof(bool)))),
 
-                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Add),
+                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Add,
+                    x => x.Type == typeof(int),
+                    x => x.Type == typeof(int)),
                 //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Subtract),
                 //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Divide),
-               // new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Multiply),
-                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Modulo),
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Multiply),
+                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Modulo,
+                    x => x.Type == typeof(int),
+                    x => x.Type == typeof(int)),
 
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.LessThan),
-                new StandardExpressionFactory((Func<Expression>)Expression.Quote)
-                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.LessThanOrEqual),
-                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.GreaterThan),
-                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.GreaterThanOrEqual),
-                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Equal),
-                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.NotEqual),
+                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.LessThan,
+                    x => x.Type == typeof(int),
+                    x => x.Type == typeof(int)),
+                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.LessThanOrEqual,
+                    x => x.Type == typeof(int),
+                    x => x.Type == typeof(int)),
 
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.IfThen),
-                //new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression>)Expression.IfThenElse),
+                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.GreaterThan,
+                    x => x.Type == typeof(int),
+                    x => x.Type == typeof(int)),
+                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.GreaterThanOrEqual,
+                    x => x.Type == typeof(int),
+                    x => x.Type == typeof(int)),
 
-                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Assign),
+                new SameTypeExpressionFactory((Func<Expression, Expression, Expression>)Expression.Equal,
+                    x => x.Type != typeof(void)),
 
-                //new StandardExpressionFactory((Func<Expression, Expression>)Expression.PostDecrementAssign),
-                //new StandardExpressionFactory((Func<Expression, Expression>)Expression.PostIncrementAssign),
+                new SameTypeExpressionFactory((Func<Expression, Expression, Expression>)Expression.NotEqual,
+                    x => x.Type != typeof(void)),
+
+                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.IfThen,
+                    x => x.Type == typeof(bool),
+                    x => true),
+
+                new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression>)Expression.IfThenElse,
+                    x => x.Type == typeof(bool),
+                    x => true,
+                    x => true),
+
+                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Assign),
+                new AssignExpressionFactory(),
+
+                new StandardExpressionFactory((Func<Expression, Expression>)Expression.PostDecrementAssign,
+                    x => x.Type == typeof(int) && x.CheckCanWrite()),
+                new StandardExpressionFactory((Func<Expression, Expression>)Expression.PostIncrementAssign,
+                    x => x.Type == typeof(int) && x.CheckCanWrite()),
 
                 //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.And),
                 //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Or),
@@ -97,21 +123,30 @@ namespace MatiGen
 
                 //new ConstantExpressionFactory(Expression.Constant(Math.E)),
                 //new ConstantExpressionFactory(Expression.Constant(Math.PI)),
-                //new ConstantExpressionFactory(Expression.Constant(1)),
+                new ConstantExpressionFactory(Expression.Constant(1)),
                 //new ConstantExpressionFactory(Expression.Constant(-1)),
-                //new ConstantExpressionFactory(Expression.Constant(0)),
+                new ConstantExpressionFactory(Expression.Constant(0)),
+                //new ConstantExpressionFactory(E)
 
-                //new RandomNumberExpressionFactory(RandomNumberType.Integer),
+                new StandardExpressionFactory( (Func<Expression>) (() => Expression.Constant(DefaultRandom.Next( Game2048Problem.GameBoardHeight * Game2048Problem.GameBoardWidth )))),
+
+                new StandardExpressionFactory( (Func<Expression, Expression, Expression, Expression>) ((array, x, y) => 
+                          Expression.ArrayAccess(array, Expression.Modulo(x, Expression.Constant(Game2048Problem.GameBoardWidth)), Expression.Modulo(y, Expression.Constant(Game2048Problem.GameBoardHeight)))),
+                          x => x.Type.IsArray,
+                          x => x.Type == typeof(int),
+                          x => x.Type == typeof(int)),
+
+                new RandomNumberExpressionFactory(RandomNumberType.Integer),
                 //new RandomNumberExpressionFactory(RandomNumberType.Double),
 
                 // These won't work this way (LabelTarter is not a subclass of Expression)
                 //new StandardExpressionFactory((Func<Expression, LabelTarget, Expression>)((arg1, label) => Expression.Return(label, arg1))),
                 //new StandardExpressionFactory((Func<LabelTarget>)Expression.Label),
 
-                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Block),
-                //new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression>)Expression.Block),
-                //new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression, Expression>)Expression.Block),
-                //new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression, Expression, Expression>)Expression.Block),
+                new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Block),
+                new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression>)Expression.Block),
+                new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression, Expression>)Expression.Block),
+                new StandardExpressionFactory((Func<Expression, Expression, Expression, Expression, Expression, Expression>)Expression.Block),
             };
         }
 

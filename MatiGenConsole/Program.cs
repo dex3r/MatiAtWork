@@ -45,7 +45,7 @@ namespace MatiGenConsole
 
         private static void PopInit()
         {
-            population.InitializeRandomPopulation(10, 1, 1);
+            population.InitializeRandomPopulation(1000, 10, 20);
         }
 
         private static void Report(GPGenome genome)
@@ -61,7 +61,7 @@ namespace MatiGenConsole
 
                 Console.WriteLine("Generation: " + population.Generation);
                 Console.WriteLine("Best genome fitness: " + genome.Fitness.Value);
-                Console.WriteLine("Average value: " + RevertFitness(genome.Fitness.Value));
+                //Console.WriteLine("Average value: " + RevertFitness(genome.Fitness.Value));
 
                 int variablesCount = genome.UsedExpressions.Where(x => typeof(ParameterExpression).IsAssignableFrom(x.GetType())).Count();
                 Console.WriteLine("Variables count: " + variablesCount);
@@ -75,7 +75,7 @@ namespace MatiGenConsole
 
         static void InitializeProblem()
         {
-            problem = new AddingProblem();
+            problem = new Game2048Problem();
         }
     }
 }

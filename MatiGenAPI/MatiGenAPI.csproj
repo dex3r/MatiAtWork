@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0E2505FB-2771-4697-99AB-12FA966770C4}</ProjectGuid>
+    <ProjectGuid>{935B1073-FD46-487D-9CA3-76B98AE8C625}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Utils</RootNamespace>
-    <AssemblyName>Utils</AssemblyName>
+    <RootNamespace>MatiGenAPI</RootNamespace>
+    <AssemblyName>MatiGenAPI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,13 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultRandom.cs" />
-    <Compile Include="ExpressionExtensions.cs" />
-    <Compile Include="IEnumerableExtensions.cs" />
-    <Compile Include="ITempDirManager.cs" />
+    <Compile Include="IProblem.cs" />
+    <Compile Include="IProblemInterpretter.cs" />
+    <Compile Include="IProblemSolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StringExtensions.cs" />
-    <Compile Include="TempDirManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

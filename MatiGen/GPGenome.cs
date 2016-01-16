@@ -157,6 +157,8 @@ namespace MatiGen
             }
             else
             {
+                //throw new Exception("Expression coult not be created");
+
                 //TODO: Could not create expression from factory for some reason.
                 //TODO: Possible handle it (ie. report that expression was not added)
             }
@@ -170,7 +172,7 @@ namespace MatiGen
         private Expression RandomizeExpression(ProblemBase problem, MutationSettings settings)
         {
             IExpressionFactory factory = settings.AvailableExpressions.Random(RAND);
-            return factory.Create(problem.Parameters, UsedExpressions);
+            return factory.Create(problem.Parameters.Concat(UsedExpressions));
         }
 
         public void RebuildFinalExpression(ProblemBase problem)
@@ -193,7 +195,7 @@ namespace MatiGen
 
                         return false;
                     }));
-               
+
                 var variables = UsedExpressions.Where(x => typeof(ParameterExpression).IsAssignableFrom(x.GetType())).Cast<ParameterExpression>();
 
                 var validLastExpressions = finalExpressions.Concat(variables).Where(x => problem.MethodReturnType.IsAssignableFrom(x.Type));
@@ -204,6 +206,12 @@ namespace MatiGen
                     lastExpression = validLastExpressions.Random(RAND);
 
                     finalExpressions = finalExpressions.Concat(Enumerable.Repeat(lastExpression, 1));
+                }
+
+                // Parameter expression cannot be present more than once in Epxression Tree
+                if(lastExpression.NodeType == ExpressionType.Parameter)
+                {
+                    TODO
                 }
 
                 //System.Diagnostics.Debug.WriteLine("Last expression: " + lastExpression.GetType() + " nodeType: " + lastExpression.NodeType);

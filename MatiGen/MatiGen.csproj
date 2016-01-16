@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssignExpressionFactory.cs" />
     <Compile Include="ConstantExpressionFactory.cs" />
     <Compile Include="Decompiler.cs" />
     <Compile Include="GPGenome.cs" />
@@ -61,12 +62,18 @@
     <Compile Include="Problem.cs" />
     <Compile Include="ProblemBase.cs" />
     <Compile Include="Problems\AddingProblem.cs" />
+    <Compile Include="Problems\Game2048Problem.cs" />
     <Compile Include="Problems\BlackjackProblem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomNumberExpressionFactory.cs" />
+    <Compile Include="SameTypeExpressionFactory.cs" />
     <Compile Include="StandardExpressionFactory.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Game2048\Game2048.csproj">
+      <Project>{c034f1c7-d2b1-4c6f-806a-aef01e314b29}</Project>
+      <Name>Game2048</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Launcher\Utils\Utils.csproj">
       <Project>{0e2505fb-2771-4697-99ab-12fa966770c4}</Project>
       <Name>Utils</Name>

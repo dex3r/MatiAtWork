@@ -16,7 +16,7 @@ namespace MatiGen
             this.expression = expr;
         }
 
-        public Expression Create(params IEnumerable<Expression>[] expressions)
+        public Expression Create(IEnumerable<Expression> expressions)
         {
             return expression;
         }

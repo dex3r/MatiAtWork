@@ -47,6 +47,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Performance2.psess = Performance2.psess
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatiGenAPI", "MatiGenAPI\MatiGenAPI.csproj", "{935B1073-FD46-487D-9CA3-76B98AE8C625}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game2048", "Game2048\Game2048.csproj", "{C034F1C7-D2B1-4C6F-806A-AEF01E314B29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -238,6 +242,26 @@ Global
 		{B43DF9E2-4FE7-4483-9534-2E010A6AC9E0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B43DF9E2-4FE7-4483-9534-2E010A6AC9E0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B43DF9E2-4FE7-4483-9534-2E010A6AC9E0}.Release|x86.ActiveCfg = Release|Any CPU
+		{935B1073-FD46-487D-9CA3-76B98AE8C625}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{935B1073-FD46-487D-9CA3-76B98AE8C625}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{935B1073-FD46-487D-9CA3-76B98AE8C625}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{935B1073-FD46-487D-9CA3-76B98AE8C625}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{935B1073-FD46-487D-9CA3-76B98AE8C625}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{935B1073-FD46-487D-9CA3-76B98AE8C625}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{935B1073-FD46-487D-9CA3-76B98AE8C625}.Release|Any CPU.Build.0 = Release|Any CPU
+		{935B1073-FD46-487D-9CA3-76B98AE8C625}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{935B1073-FD46-487D-9CA3-76B98AE8C625}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{935B1073-FD46-487D-9CA3-76B98AE8C625}.Release|x86.ActiveCfg = Release|Any CPU
+		{C034F1C7-D2B1-4C6F-806A-AEF01E314B29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C034F1C7-D2B1-4C6F-806A-AEF01E314B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C034F1C7-D2B1-4C6F-806A-AEF01E314B29}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C034F1C7-D2B1-4C6F-806A-AEF01E314B29}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C034F1C7-D2B1-4C6F-806A-AEF01E314B29}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C034F1C7-D2B1-4C6F-806A-AEF01E314B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C034F1C7-D2B1-4C6F-806A-AEF01E314B29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C034F1C7-D2B1-4C6F-806A-AEF01E314B29}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C034F1C7-D2B1-4C6F-806A-AEF01E314B29}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C034F1C7-D2B1-4C6F-806A-AEF01E314B29}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -257,8 +281,6 @@ Global
 		{D6416955-2314-4193-8D7F-8B2DD94B18D6} = {5C6156A6-853D-44AA-A478-062FBF706A12}
 		{5BD88F7D-5869-452C-B0CC-4E3CA0C890BD} = {5C6156A6-853D-44AA-A478-062FBF706A12}
 		{61ED4DD5-AE80-4B32-9E9D-5253EEF1B6A2} = {5C6156A6-853D-44AA-A478-062FBF706A12}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
+		{935B1073-FD46-487D-9CA3-76B98AE8C625} = {5C6156A6-853D-44AA-A478-062FBF706A12}
 	EndGlobalSection
 EndGlobal
