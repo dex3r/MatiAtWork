@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace MatiGen.Problems
 {
-    public sealed class AddingProblem : ProblemBase
+    public sealed class AddingProblem : SimpleProblemBase
     {
         public override Type MethodReturnType
         {

@@ -7,8 +7,8 @@ using System.Linq.Expressions;
 
 namespace MatiGen.Problems
 {
-    public sealed class BlackjackProblem : ProblemBase
-    {
+    public sealed class BlackjackProblem : SimpleProblemBase
+	{
         public override Type MethodReturnType
         {
             get { return typeof(int); }

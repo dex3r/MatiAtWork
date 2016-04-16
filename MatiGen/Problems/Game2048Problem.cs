@@ -8,8 +8,8 @@ using Game2048;
 
 namespace MatiGen.Problems
 {
-    public sealed class Game2048Problem : ProblemBase
-    {
+    public sealed class Game2048Problem : SimpleProblemBase
+	{
         public const int GameBoardWidth = 4;
         public const int GameBoardHeight = 4;
 

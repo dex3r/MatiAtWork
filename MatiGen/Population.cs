@@ -124,7 +124,7 @@ namespace MatiGen
                 //new ConstantExpressionFactory(Expression.Constant(Math.E)),
                 //new ConstantExpressionFactory(Expression.Constant(Math.PI)),
                 new ConstantExpressionFactory(Expression.Constant(1)),
-                //new ConstantExpressionFactory(Expression.Constant(-1)),
+                new ConstantExpressionFactory(Expression.Constant(-1)),
                 new ConstantExpressionFactory(Expression.Constant(0)),
                 //new ConstantExpressionFactory(E)
 

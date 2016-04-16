@@ -54,9 +54,14 @@
     <Compile Include="AssignExpressionFactory.cs" />
     <Compile Include="ConstantExpressionFactory.cs" />
     <Compile Include="Decompiler.cs" />
+    <Compile Include="GenericProblems\GenericAddingProblem.cs" />
+    <Compile Include="GenericProblems\GenericProblemHandler.cs" />
+    <Compile Include="GenericProblems\IGenericAddingProblem.cs" />
+    <Compile Include="GenericProblems\IProblemInterface.cs" />
     <Compile Include="GPGenome.cs" />
     <Compile Include="IDecompiler.cs" />
     <Compile Include="IExpressionFactory.cs" />
+    <Compile Include="IProblemAccessExpressionFactory.cs" />
     <Compile Include="MutationSettings.cs" />
     <Compile Include="Population.cs" />
     <Compile Include="Problem.cs" />
@@ -67,6 +72,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomNumberExpressionFactory.cs" />
     <Compile Include="SameTypeExpressionFactory.cs" />
+    <Compile Include="SimpleProblemBase.cs" />
     <Compile Include="StandardExpressionFactory.cs" />
   </ItemGroup>
   <ItemGroup>

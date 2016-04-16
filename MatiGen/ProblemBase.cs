@@ -7,31 +7,33 @@ using System.Threading.Tasks;
 
 namespace MatiGen
 {
-    public abstract class ProblemBase
-    {
-        private IEnumerable<ParameterExpression> _Parameters = new List<ParameterExpression>();
+	public abstract class ProblemBase
+	{
+		public IEnumerable<ParameterExpression> Parameters { get; protected set; }
 
-        public IEnumerable<ParameterExpression> Parameters
-        {
-            get { return _Parameters; }
-            protected set { _Parameters = value; }
-        }
+		public IEnumerable<Expression> AvailableExressions { get; private set; }
 
-        public abstract Type MethodReturnType
-        {
-            get;
-        }
+		public abstract Type MethodReturnType
+		{
+			get;
+		}
 
-        public ProblemBase()
-        {
-            Parameters = CreateParameters();
-        }
+		public void Initialize()
+		{
+			AvailableExressions = CreateAvailableExpressions();
+			Parameters = CreateParameters();
+		}
 
-        protected virtual IEnumerable<ParameterExpression> CreateParameters()
-        {
-            return Enumerable.Empty<ParameterExpression>();
-        }
+		protected virtual IEnumerable<Expression> CreateAvailableExpressions()
+		{
+			return Enumerable.Empty<Expression>();
+		}
 
-        public abstract double Evaluate(Delegate solverMethod);
-    }
+		protected virtual IEnumerable<ParameterExpression> CreateParameters()
+		{
+			return Enumerable.Empty<ParameterExpression>();
+		}
+
+		public abstract double Evaluate(Delegate solverMethod);
+	}
 }
