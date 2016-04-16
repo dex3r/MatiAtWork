@@ -226,7 +226,11 @@ namespace MatiGen
 
 			Action<int> body = i =>
 			{
-				GPGenome genome = Genomes[i];
+				GPGenome genome;
+				lock (sync)
+				{
+					genome = Genomes[i];
+				}
 
 				if (bestGenome == null || !Object.ReferenceEquals(bestGenome, genome))
 				{
