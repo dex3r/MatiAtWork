@@ -8,20 +8,19 @@ using System.Threading.Tasks;
 
 namespace MatiGen
 {
-    public class AssignExpressionFactory : IExpressionFactory
-    {
-        protected readonly static Random RAND = new Random();
+	public class AssignExpressionFactory : IExpressionFactory
+	{
+		public Expression Create(IEnumerable<Expression> expressions)
+		{
+			var validExpressions = expressions.Where(x => ExpressionExtensions.CheckCanWrite(x));
+			var leftExpr = validExpressions.RandomOrDefault();
 
-        public Expression Create(IEnumerable<Expression> expressions)
-        {
-            var leftExpr = expressions.Where(ExpressionExtensions.CheckCanWrite).RandomOrDefault(RAND);
+			if (leftExpr == null)
+			{
+				return null;
+			}
 
-            if (leftExpr == null)
-            {
-                return null;
-            }
-
-            return expressions.Where(x => leftExpr.Type.IsAssignableFrom(x.Type)).RandomOrDefault(RAND);
-        }
-    }
+			return expressions.Where(x => leftExpr.Type.IsAssignableFrom(x.Type)).RandomOrDefault();
+		}
+	}
 }

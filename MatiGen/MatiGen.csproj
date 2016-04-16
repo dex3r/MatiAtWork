@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -54,14 +54,19 @@
     <Compile Include="AssignExpressionFactory.cs" />
     <Compile Include="ConstantExpressionFactory.cs" />
     <Compile Include="Decompiler.cs" />
+    <Compile Include="GenericProblems\AddingProblemEvaluator.cs" />
     <Compile Include="GenericProblems\GenericAddingProblem.cs" />
-    <Compile Include="GenericProblems\GenericProblemHandler.cs" />
+    <Compile Include="GenericProblems\ProblemHandler.cs" />
     <Compile Include="GenericProblems\IGenericAddingProblem.cs" />
+    <Compile Include="GenericProblems\IGenericProblemEvaluator.cs" />
+    <Compile Include="GenericProblems\IProblemProperty.cs" />
     <Compile Include="GenericProblems\IProblemInterface.cs" />
+    <Compile Include="GenericProblems\ProblemProperty.cs" />
     <Compile Include="GPGenome.cs" />
     <Compile Include="IDecompiler.cs" />
     <Compile Include="IExpressionFactory.cs" />
     <Compile Include="IProblemAccessExpressionFactory.cs" />
+    <Compile Include="MethodCallFactory.cs" />
     <Compile Include="MutationSettings.cs" />
     <Compile Include="Population.cs" />
     <Compile Include="Problem.cs" />

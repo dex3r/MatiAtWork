@@ -6,76 +6,91 @@ using System.Threading.Tasks;
 using MatiGen;
 using MatiGen.Problems;
 using System.Linq.Expressions;
+using MatiGen.GenericProblems;
 
 namespace MatiGenConsole
 {
-    class Program
-    {
-        static ITempDirManager TempDir;
-        static IDecompiler Decompiler;
+	class Program
+	{
+		static ITempDirManager TempDir;
+		static IDecompiler Decompiler;
 
-        static ProblemBase problem;
-        static Population population;
+		static ProblemHandler problem;
+		static Population population;
 
-        static void Main(string[] args)
-        {
-            InitializeProblem();
+		static void Main(string[] args)
+		{
+			InitializeProblem();
 
-            population = new Population(problem);
-            TempDir = new TempDirManager("MatiGenTest");
-            Decompiler = new Decompiler(TempDir);
+			population = new Population(problem);
+			TempDir = new TempDirManager("MatiGenTest");
+			Decompiler = new Decompiler(TempDir);
 
-            PopInit();
-            population.ProcessGeneration();
+			PopInit();
+			population.ProcessGeneration();
 
-            GPGenome bestGenome = population.GetBestGenome();
-            Report(bestGenome);
+			GPGenome bestGenome = population.GetBestGenome();
+			Report(bestGenome);
 
-            while (true)
-            {
-                //PopInit();
-                population.ProcessGeneration();
+			bool cont = true;
 
-                bestGenome = population.GetBestGenome();
-                Report(bestGenome);
-            }
+			if (bestGenome != null && bestGenome.Fitness.HasValue && bestGenome.Fitness.Value == 1d)
+			{
+				cont = false;
+			}
 
-            Console.ReadKey();
-        }
+			while (cont)
+			{
+				PopInit();
+				population.ProcessGeneration();
 
-        private static void PopInit()
-        {
-            population.InitializeRandomPopulation(1000, 10, 20);
-        }
+				bestGenome = population.GetBestGenome();
+				Report(bestGenome);
 
-        private static void Report(GPGenome genome)
-        {
-            if (genome == null)
-            {
-                Console.WriteLine("There is no best genome");
-            }
-            else
-            {
-                Console.WriteLine("Best genome code: ");
-                Console.WriteLine(Decompiler.DecompileExpression(genome.FinalExpression));
+				if (bestGenome != null && bestGenome.Fitness.HasValue && bestGenome.Fitness.Value == 1d)
+				{
+					cont = false;
+				}
+			}
 
-                Console.WriteLine("Generation: " + population.Generation);
-                Console.WriteLine("Best genome fitness: " + genome.Fitness.Value);
-                //Console.WriteLine("Average value: " + RevertFitness(genome.Fitness.Value));
+			Console.WriteLine("DONE!");
+			Console.ReadKey();
+		}
 
-                int variablesCount = genome.UsedExpressions.Where(x => typeof(ParameterExpression).IsAssignableFrom(x.GetType())).Count();
-                Console.WriteLine("Variables count: " + variablesCount);
-            }
-        }
+		private static void PopInit()
+		{
+			population.InitializeRandomPopulation(5000, 1, 40);
+		}
 
-        private static double RevertFitness(double fitness)
-        {
-            return Math.Pow(fitness, 1.0 / 14.205) * 21;
-        }
+		private static void Report(GPGenome genome)
+		{
+			if (genome == null)
+			{
+				Console.WriteLine("There is no best genome");
+			}
+			else
+			{
+				Console.WriteLine("Best genome code: ");
+				Console.WriteLine(Decompiler.DecompileExpression(genome.FinalExpression));
 
-        static void InitializeProblem()
-        {
-            problem = new Game2048Problem();
-        }
-    }
+				Console.WriteLine("Generation: " + population.Generation);
+				Console.WriteLine("Best genome fitness: " + genome.Fitness.Value);
+				//Console.WriteLine("Average value: " + RevertFitness(genome.Fitness.Value));
+
+				int variablesCount = genome.UsedExpressions.Where(x => typeof(ParameterExpression).IsAssignableFrom(x.GetType())).Count();
+				Console.WriteLine("Variables count: " + variablesCount);
+			}
+		}
+
+		private static double RevertFitness(double fitness)
+		{
+			return Math.Pow(fitness, 1.0 / 14.205) * 21;
+		}
+
+		static void InitializeProblem()
+		{
+			var evaluator = new AddingProblemEvaluator();
+			problem = new ProblemHandler(typeof(IGenericAddingProblem), evaluator);
+		}
+	}
 }

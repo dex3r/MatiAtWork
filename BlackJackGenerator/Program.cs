@@ -24,7 +24,6 @@ namespace BlackJackGenerator
                 }
             }
 
-            Random rand = new Random();
             List<List<int>> sets = new List<List<int>>(numberOfSets);
 
             for (int i = 0; i < numberOfSets; i++)
@@ -35,7 +34,7 @@ namespace BlackJackGenerator
 
                 while (cardsSum <= 21)
                 {
-                    int index = rand.Next(remainingCards.Count);
+                    int index = StaticRandom.Rand.Next(remainingCards.Count);
                     int selected = remainingCards[index];
                     remainingCards.RemoveAt(index);
 

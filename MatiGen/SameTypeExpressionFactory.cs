@@ -31,7 +31,7 @@ namespace MatiGen
                     trueTypeExprs = validExpressions.Where(x => x.Type == firstType);
                 }
 
-                var expr = trueTypeExprs.RandomOrDefault(RAND);
+                var expr = trueTypeExprs.RandomOrDefault();
 
                 if(expr == null)
                 {

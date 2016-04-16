@@ -8,19 +8,20 @@ namespace MatiGen.GenericProblems
 {
 	public class GenericAddingProblem : IGenericAddingProblem
 	{
-		public float A { get; internal set; }
+		public int A { get; private set; }
 
-		public float B { get; internal set; }
+		public int B { get; private set; }
 
-		internal float? Result { get; private set; }
+		internal int? Result { get; private set; }
 
-		public void SendResult(float result)
+		public GenericAddingProblem(int a, int b)
 		{
-			if (this.Result.HasValue)
-			{
-				return;
-			}
+			this.A = a;
+			this.B = b;
+		}
 
+		public void SendResult(int result)
+		{
 			this.Result = result;
 		}
 	}

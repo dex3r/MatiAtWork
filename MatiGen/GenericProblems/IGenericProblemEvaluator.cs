@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace MatiGen.GenericProblems
 {
-	public interface IGenericAddingProblem
+	public interface IGenericProblemEvaluator
 	{
-		int A { get; }
-		int B { get; }
-
-		void SendResult(int result);
+		double Evaluate(Delegate solverMethod);
 	}
 }

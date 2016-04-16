@@ -82,7 +82,6 @@ namespace MatiGenTesta
             long totalTries = 0;
             int minExprCount = 1;
             int maxExprCount = 10;
-            Random random = new Random();
 
             LambdaExpression bestExpr = null;
             Func<double, double, double> bestDele = null;
@@ -98,7 +97,7 @@ namespace MatiGenTesta
 
                 try
                 {
-                    int exprCount = random.Next(minExprCount, maxExprCount + 1);
+                    int exprCount = StaticRandom.Rand.Next(minExprCount, maxExprCount + 1);
                     LambdaExpression expr = CreateRandomExpression(exprCount, parameters);
 
                     Func<double, double, double> dele = (Func<double, double, double>)expr.Compile();
@@ -167,26 +166,25 @@ namespace MatiGenTesta
         private static LambdaExpression CreateRandomExpression(int expressionsCount, IEnumerable<ParameterExpression> parameters)
         {
             List<Expression> expressions = new List<Expression>(parameters);
-            Random rand = new Random();
 
             for (int i = 0; i < expressionsCount; i++)
             {
-                int r1 = rand.Next(3);
+                int r1 = StaticRandom.Rand.Next(3);
                 Expression selectedExpr = null;
 
                 if (r1 == 0)
                 {
-                    selectedExpr = expressions.Random(rand);
+                    selectedExpr = expressions.Random();
                 }
                 else if (r1 == 1)
                 {
-                    var binaryExpr = binaryExps.Random(rand);
-                    selectedExpr = binaryExpr(expressions.Random(rand), expressions.Random(rand));
+                    var binaryExpr = binaryExps.Random();
+                    selectedExpr = binaryExpr(expressions.Random(), expressions.Random());
                 }
                 else if (r1 == 2)
                 {
-                    var unaryExp = unaryExps.Random(rand);
-                    selectedExpr = unaryExp(expressions.Random(rand));
+                    var unaryExp = unaryExps.Random();
+                    selectedExpr = unaryExp(expressions.Random());
                 }
                 else
                 {
