@@ -89,10 +89,6 @@
       <Project>{0e2505fb-2771-4697-99ab-12fa966770c4}</Project>
       <Name>Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SharpNEAT\src\SharpNeatLib\SharpNeatLib.csproj">
-      <Project>{abc5c77a-deba-420c-926c-bd3e6f37ae15}</Project>
-      <Name>SharpNeatLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
