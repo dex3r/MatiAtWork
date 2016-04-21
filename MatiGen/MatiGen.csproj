@@ -51,34 +51,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssignExpressionFactory.cs" />
-    <Compile Include="ConstantExpressionFactory.cs" />
-    <Compile Include="Decompiler.cs" />
-    <Compile Include="GenericProblems\AddingProblemEvaluator.cs" />
-    <Compile Include="GenericProblems\GenericAddingProblem.cs" />
-    <Compile Include="GenericProblems\ProblemHandler.cs" />
-    <Compile Include="GenericProblems\IGenericAddingProblem.cs" />
-    <Compile Include="GenericProblems\IGenericProblemEvaluator.cs" />
-    <Compile Include="GenericProblems\IProblemProperty.cs" />
-    <Compile Include="GenericProblems\IProblemInterface.cs" />
-    <Compile Include="GenericProblems\ProblemProperty.cs" />
-    <Compile Include="GPGenome.cs" />
-    <Compile Include="IDecompiler.cs" />
-    <Compile Include="IExpressionFactory.cs" />
-    <Compile Include="IProblemAccessExpressionFactory.cs" />
-    <Compile Include="MethodCallFactory.cs" />
-    <Compile Include="MutationSettings.cs" />
-    <Compile Include="Population.cs" />
-    <Compile Include="Problem.cs" />
-    <Compile Include="ProblemBase.cs" />
-    <Compile Include="Problems\AddingProblem.cs" />
-    <Compile Include="Problems\Game2048Problem.cs" />
-    <Compile Include="Problems\BlackjackProblem.cs" />
+    <Compile Include="Core\ExpressionFactories\AssignExpressionFactory.cs" />
+    <Compile Include="Core\ExpressionFactories\ConstantExpressionFactory.cs" />
+    <Compile Include="Problems\Maths\BinaryMathProblem.cs" />
+    <Compile Include="Problems\Maths\BinaryMathProblemEvaluator.cs" />
+    <Compile Include="Problems\Maths\IBinaryMathProblem.cs" />
+    <Compile Include="Utils\Decompiler.cs" />
+    <Compile Include="Core\ProblemHandler.cs" />
+    <Compile Include="Core\IGenericProblemEvaluator.cs" />
+    <Compile Include="Core\Genome.cs" />
+    <Compile Include="Utils\IDecompiler.cs" />
+    <Compile Include="Core\IExpressionFactory.cs" />
+    <Compile Include="Core\ExpressionFactories\MethodCallFactory.cs" />
+    <Compile Include="Core\MutationSettings.cs" />
+    <Compile Include="Core\Population.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomNumberExpressionFactory.cs" />
-    <Compile Include="SameTypeExpressionFactory.cs" />
-    <Compile Include="SimpleProblemBase.cs" />
-    <Compile Include="StandardExpressionFactory.cs" />
+    <Compile Include="Core\ExpressionFactories\RandomNumberExpressionFactory.cs" />
+    <Compile Include="Core\ExpressionFactories\SameTypeExpressionFactory.cs" />
+    <Compile Include="Core\ExpressionFactories\StandardExpressionFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Game2048\Game2048.csproj">
@@ -89,6 +79,9 @@
       <Project>{0e2505fb-2771-4697-99ab-12fa966770c4}</Project>
       <Name>Utils</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Problems\README.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

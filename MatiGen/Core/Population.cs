@@ -4,8 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using MatiGen.Problems;
-using MatiGen.GenericProblems;
 using System.Diagnostics;
 using System.Collections.Concurrent;
 
@@ -21,8 +19,8 @@ namespace MatiGen
 			private set { _problem = value; }
 		}
 
-		private List<GPGenome> _genomes;
-		public List<GPGenome> Genomes
+		private List<Genome> _genomes;
+		public List<Genome> Genomes
 		{
 			get { return _genomes; }
 			private set { _genomes = value; }
@@ -56,7 +54,7 @@ namespace MatiGen
 		{
 			this.Problem = problem;
 
-			MutationSettings = new MutationSettings(GenerateExpressionsFactories(), 0.6, 6, problem);
+			MutationSettings = new MutationSettings(GenerateExpressionsFactories(), 0.8, 5, problem);
 		}
 
 		private IEnumerable<IExpressionFactory> GenerateExpressionsFactories()
@@ -65,6 +63,9 @@ namespace MatiGen
                 //new StandardExpressionFactory((Func<Expression>)(() => Expression.Variable(typeof(int)))),
                 new StandardExpressionFactory((Func<Expression>)(() => Expression.Variable(typeof(int)))),
                 //new StandardExpressionFactory((Func<Expression>)(() => Expression.Variable(typeof(bool)))),
+
+				URGENT TODO:
+				//Replace hardcoded "int" with more generic solution, that will be true for int, double and float (or even for decimals)
 
                 new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Add,
 					x => x.Type == typeof(int),
@@ -120,9 +121,17 @@ namespace MatiGen
 				new StandardExpressionFactory((Func<Expression, Expression>)Expression.PostIncrementAssign,
 					x => x.Type == typeof(int) && x.CheckCanWrite()),
 
-                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.And),
-                //new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Or),
-                //new StandardExpressionFactory((Func<Expression, Expression>)Expression.Not),
+				new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.And,
+					x => x.Type == typeof(bool),
+					x => x.Type == typeof(bool)),
+
+				new StandardExpressionFactory((Func<Expression, Expression, Expression>)Expression.Or,
+					x => x.Type == typeof(bool),
+					x => x.Type == typeof(bool)),
+
+				new StandardExpressionFactory((Func<Expression, Expression>)Expression.Not,
+					x => x.Type == typeof(bool)),
+
                 //new StandardExpressionFactory((Func<Expression, Expression>)Expression.IsTrue),
 
                 //new StandardExpressionFactory((Func<Expression, Expression>)(x => Expression.Call((((Func<double, double>)Math.Sin)).Method, x))),
@@ -136,13 +145,13 @@ namespace MatiGen
 				new ConstantExpressionFactory(Expression.Constant(0)),
                 //new ConstantExpressionFactory(E)
 
-                new StandardExpressionFactory( (Func<Expression>) (() => Expression.Constant(DefaultRandom.Next( Game2048Problem.GameBoardHeight * Game2048Problem.GameBoardWidth )))),
+                //new StandardExpressionFactory( (Func<Expression>) (() => Expression.Constant(DefaultRandom.Next( Game2048Problem.GameBoardHeight * Game2048Problem.GameBoardWidth )))),
 
-				new StandardExpressionFactory( (Func<Expression, Expression, Expression, Expression>) ((array, x, y) =>
-						  Expression.ArrayAccess(array, Expression.Modulo(x, Expression.Constant(Game2048Problem.GameBoardWidth)), Expression.Modulo(y, Expression.Constant(Game2048Problem.GameBoardHeight)))),
-						  x => x.Type.IsArray,
-						  x => x.Type == typeof(int),
-						  x => x.Type == typeof(int)),
+				//new StandardExpressionFactory( (Func<Expression, Expression, Expression, Expression>) ((array, x, y) =>
+				//		  Expression.ArrayAccess(array, Expression.Modulo(x, Expression.Constant(Game2048Problem.GameBoardWidth)), Expression.Modulo(y, Expression.Constant(Game2048Problem.GameBoardHeight)))),
+				//		  x => x.Type.IsArray,
+				//		  x => x.Type == typeof(int),
+				//		  x => x.Type == typeof(int)),
 
 				new RandomNumberExpressionFactory(RandomNumberType.Integer),
                 //new RandomNumberExpressionFactory(RandomNumberType.Double),
@@ -163,12 +172,12 @@ namespace MatiGen
 			Generation = 0;
 			this.Size = size;
 
-			var tempList = new ConcurrentBag<GPGenome>();
+			var tempList = new ConcurrentBag<Genome>();
 
 			Action<int> body = i =>
 			{
 				int complexity = StaticRandom.Rand.Next(minComplexity, maxComplexity + 1);
-				GPGenome newGenome = new GPGenome();
+				Genome newGenome = new Genome();
 				newGenome.InitializeRandomGenome(complexity, Problem, MutationSettings);
 
 				tempList.Add(newGenome);
@@ -183,7 +192,7 @@ namespace MatiGen
 			Parallel.For(0, size, body);
 #endif
 
-			Genomes = new List<GPGenome>(tempList);
+			Genomes = new List<Genome>(tempList);
 		}
 
 		public void ProcessGeneration()
@@ -191,7 +200,7 @@ namespace MatiGen
 			if (Generation != 0)
 			{
 				// Clone best genome
-				GPGenome bestGenome = GetBestGenome();
+				Genome bestGenome = GetBestGenome();
 
 				if (bestGenome != null)
 				{
@@ -220,13 +229,13 @@ namespace MatiGen
 
 		private void MutateGenomes()
 		{
-			GPGenome bestGenome = GetBestGenome();
+			Genome bestGenome = GetBestGenome();
 
 			object sync = new object();
 
 			Action<int> body = i =>
 			{
-				GPGenome genome;
+				Genome genome;
 				lock (sync)
 				{
 					genome = Genomes[i];
@@ -234,7 +243,7 @@ namespace MatiGen
 
 				if (bestGenome == null || !Object.ReferenceEquals(bestGenome, genome))
 				{
-					GPGenome clone = genome.Clone();
+					Genome clone = genome.Clone();
 					clone.Mutate(Problem, MutationSettings);
 					clone.Fitness = Problem.Evaluator.Evaluate(clone.CachedDelegate);
 
@@ -263,7 +272,7 @@ namespace MatiGen
 		{
 			Action<int> body = i =>
 			{
-				GPGenome genome = Genomes[i];
+				Genome genome = Genomes[i];
 
 				if (!genome.Fitness.HasValue && genome.CachedDelegate != null)
 				{
@@ -282,13 +291,13 @@ namespace MatiGen
 
 		}
 
-		public GPGenome GetBestGenome()
+		public Genome GetBestGenome()
 		{
-			GPGenome bestGenome = null;
+			Genome bestGenome = null;
 
 			for (int i = 0; i < Genomes.Count; i++)
 			{
-				GPGenome genome = Genomes[i];
+				Genome genome = Genomes[i];
 
 				if (genome.Fitness.HasValue)
 				{

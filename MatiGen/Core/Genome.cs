@@ -1,5 +1,4 @@
-﻿using MatiGen.GenericProblems;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MatiGen
 {
-	public class GPGenome
+	public class Genome
 	{
 		private double? _fitness;
 		public double? Fitness
@@ -64,9 +63,9 @@ namespace MatiGen
 			}
 		}
 
-		public GPGenome Clone()
+		public Genome Clone()
 		{
-			GPGenome clone = new GPGenome();
+			Genome clone = new Genome();
 
 			clone.UsedExpressions = new List<Expression>(UsedExpressions);
 			clone.FinalExpression = FinalExpression;

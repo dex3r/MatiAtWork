@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MatiGen;
-using MatiGen.Problems;
 using System.Linq.Expressions;
-using MatiGen.GenericProblems;
+using MatiGen.Problems.Maths;
 
 namespace MatiGenConsole
 {
@@ -29,7 +28,7 @@ namespace MatiGenConsole
 			PopInit();
 			population.ProcessGeneration();
 
-			GPGenome bestGenome = population.GetBestGenome();
+			Genome bestGenome = population.GetBestGenome();
 			Report(bestGenome);
 
 			bool cont = true;
@@ -41,7 +40,7 @@ namespace MatiGenConsole
 
 			while (cont)
 			{
-				PopInit();
+				//PopInit();
 				population.ProcessGeneration();
 
 				bestGenome = population.GetBestGenome();
@@ -59,10 +58,10 @@ namespace MatiGenConsole
 
 		private static void PopInit()
 		{
-			population.InitializeRandomPopulation(5000, 1, 40);
+			population.InitializeRandomPopulation(5000, 1, 2);
 		}
 
-		private static void Report(GPGenome genome)
+		private static void Report(Genome genome)
 		{
 			if (genome == null)
 			{
@@ -89,8 +88,9 @@ namespace MatiGenConsole
 
 		static void InitializeProblem()
 		{
-			var evaluator = new AddingProblemEvaluator();
-			problem = new ProblemHandler(typeof(IGenericAddingProblem), evaluator);
+			//TODO: Do it in more civisiled manner.
+			var evaluator = BinaryMathProblemEvaluator.AddingProblem;
+			problem = new ProblemHandler(typeof(IBinaryMathProblem), evaluator);
 		}
 	}
 }
